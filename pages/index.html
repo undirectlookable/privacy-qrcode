@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR code</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+    }
+
+    body {
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #text {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 8px;
+      font-family: sans-serif;
+      color: #333;
+    }
+
+    .qr-area {
+      margin-top: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <textarea id="text" title="type text here" placeholder="Type text to generate a QR code" rows="10"></textarea>
+  <div class="qr-area">
+    <img id="image" title="qr code image" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" />
+  </div>
+
+  <script
+    src="https://unpkg.com/qrcode@1.5.1/build/qrcode.js"
+    integrity="sha256-uliN+vc4v4mA5do7aAqxzj8gWvdXdFTBb5wFBv50TfQ="
+    crossorigin="anonymous"
+  ></script>
+
+  <script>
+    (() => {
+      const textElem = document.querySelector('#text');
+      const imageElem = document.querySelector('#image');
+
+      const renderQR = (text) => {
+        if (!text) {
+          imageElem.style.display = 'none';
+          return;
+        }
+        QRCode.toDataURL(text, { margin: 1 }, (error, url) => {
+          if (error) {
+            console.error(error);
+            return;
+          }
+          imageElem.setAttribute('src', url);
+          imageElem.style.display = 'block';
+        });
+      };
+
+      textElem.addEventListener('input', (event) => renderQR(event.target.value));
+    })();
+  </script>
+</body>
+
+</html>
